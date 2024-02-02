@@ -1,0 +1,20 @@
+{
+    "css.lint.unknownAtRules": "ignore",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "eslint.validate": ["javascript", "javascriptreact"],
+    "tailwindCSS.experimental.classRegex": [
+      ["cva(([^)]*))", "[\"'`]([^\"'`]*).*?[\"'`]"],
+      ["cx(([^)]*))", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+    ],
+    "eslint.workingDirectories": [
+      {
+        "mode": "auto"
+      }
+    ],
+    "conventionalCommits.scopes": [
+      "backend",
+    ]
+  }
+  

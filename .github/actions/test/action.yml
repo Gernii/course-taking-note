@@ -1,0 +1,19 @@
+name: Test
+
+description: Lint, Fmt, Test, Check and build
+
+runs:
+  using: composite
+
+  steps:
+    - name: Lint
+      shell: bash
+      run: npm run lint
+
+    - name: Fmt
+      shell: bash
+      run: npm run fmt
+
+    - name: Test
+      shell: bash
+      run: npm run test

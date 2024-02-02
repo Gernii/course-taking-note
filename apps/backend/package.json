@@ -1,0 +1,35 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "Course Taking Note Backend",
+  "engines": {
+    "node": ">=20"
+  }, 
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts",
+
+    "fmt": "run-s \"fmt.*\"",
+    "fmt.write": "prettier --write \"src/**/*.ts\"",
+    "fmt.check": "prettier --check \"src/**/*.ts\"",
+    "lint": "run-s \"lint.*\"",
+    "lint.fix": "eslint \"src/**/*.ts\" --fix",
+    "lint.check": "eslint  \"src/**/*.ts\"  --max-warnings=0"
+  },
+  "dependencies": {
+    "hono": "^3.12.8"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@cloudflare/workers-types": "^4.20240129.0",
+    "wrangler": "^3.25.0"
+  },
+  "lint-staged": {
+    "**/src/**/*.ts": [
+      "eslint --fix",
+      "eslint --max-warnings=0",
+      "prettier --write",
+      "prettier --check"
+    ]
+  }
+}
