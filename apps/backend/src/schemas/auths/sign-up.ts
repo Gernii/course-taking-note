@@ -1,6 +1,6 @@
 import { z } from '@hono/zod-openapi';
 
-export const signUpBodySchema = z.object({
+export const schemaSignUpBody = z.object({
 	username: z.string().openapi({
 		example: 'litahung'
 	}),
@@ -9,7 +9,7 @@ export const signUpBodySchema = z.object({
 	})
 });
 
-export const signUpResponseSchema = z.object({
+export const schemaSignUpResponse = z.object({
 	access_token: z.string().openapi({
 		example: 'JWT token'
 	}),

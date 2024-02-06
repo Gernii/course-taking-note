@@ -1,8 +1,9 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 
-import { authSignUpHandler } from './sign-up.controller';
+import { controllerAuthSignUp } from './sign-up';
+import { controllerAuthSignIn } from './sign-in';
 
-export const authRoutes = new OpenAPIHono();
+export const routeAuths = new OpenAPIHono();
 
-// authRoutes.route('/', authSignInRoute);
-authRoutes.route('/', authSignUpHandler);
+routeAuths.route('/', controllerAuthSignUp);
+routeAuths.route('/', controllerAuthSignIn);
