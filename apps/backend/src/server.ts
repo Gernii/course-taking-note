@@ -10,7 +10,7 @@ import type { Env } from '$configs/type.config';
 
 import { deserializeUserMiddleware } from '$middlewares/deserialize-user.middleware';
 
-import { authRoutes } from '$controllers/auths';
+import { routeAuths } from '$controllers/auths';
 
 const app = new OpenAPIHono<Env>();
 
@@ -34,7 +34,7 @@ app.use('*', csrf({ origin: '*' }));
 app.use('*', deserializeUserMiddleware);
 
 // Start: routes
-app.route('auths', authRoutes);
+app.route('auths', routeAuths);
 // End: routes
 
 // Custom Not Found Message

@@ -1,10 +1,11 @@
 import { Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
 import { HTTPException } from 'hono/http-exception';
+import { StatusCodes } from 'http-status-codes';
 
-import type { Env } from '$configs/type.config';
+import type { EnvBindings } from '$configs/type.config';
 
-import type { UserModel } from '$models/users.models';
+import type { UserModel } from '$models/user';
 
 export interface Database {
 	user: UserModel;
@@ -16,7 +17,7 @@ export interface Database {
 // to communicate with your database.
 let dbConnection: Kysely<Database> | null = null;
 
-const connectPGDatabase = (config: Env['Bindings']) => {
+const connectPGDatabase = (config: EnvBindings) => {
 	const { PG_DATABASE, PG_HOST, PG_USER, PG_PORT, PG_PASSWORD } = config;
 	if (
 		PG_DATABASE === undefined ||
@@ -25,7 +26,7 @@ const connectPGDatabase = (config: Env['Bindings']) => {
 		PG_PORT === undefined ||
 		PG_PASSWORD === undefined
 	) {
-		throw new HTTPException(500, {
+		throw new HTTPException(StatusCodes.INTERNAL_SERVER_ERROR, {
 			message: 'PG_* is missing'
 		});
 	}
@@ -46,4 +47,4 @@ const connectPGDatabase = (config: Env['Bindings']) => {
 	return dbConnection;
 };
 
-export const PGDBHandler = (config: Env['Bindings']) => dbConnection ?? connectPGDatabase(config);
+export const PGDBHandler = (config: EnvBindings) => dbConnection ?? connectPGDatabase(config);

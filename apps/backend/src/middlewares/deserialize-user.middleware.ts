@@ -2,6 +2,7 @@ import { createFactory } from 'hono/factory';
 import { HTTPException } from 'hono/http-exception';
 import { verify } from 'hono/jwt';
 import { env } from 'hono/adapter';
+import { StatusCodes } from 'http-status-codes';
 
 import type { Env } from '$configs/type.config';
 
@@ -37,6 +38,6 @@ export const deserializeUserMiddleware = factory.createMiddleware(async (c, next
 		c.set('user', userData);
 		await next();
 	} catch (e) {
-		throw new HTTPException(401, { message: 'Unauthorized' });
+		throw new HTTPException(StatusCodes.UNAUTHORIZED, { message: 'Unauthorized' });
 	}
 });

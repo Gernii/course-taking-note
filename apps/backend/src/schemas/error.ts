@@ -1,6 +1,6 @@
 import { z } from '@hono/zod-openapi';
 
-export const Error400To499Schema = z
+export const schemaError400To499 = z
 	.object({
 		code: z.number().openapi({
 			example: 401
