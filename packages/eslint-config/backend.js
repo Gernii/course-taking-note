@@ -45,7 +45,43 @@ module.exports = {
     "import/order": [
       "warn",
       {
-        pathGroups: [],
+        pathGroups: [
+          {
+            pattern: "$configs/**",
+            position: "after",
+            group: "external",
+          },
+          {
+            pattern: "$databases/**",
+            position: "after",
+            group: "external",
+          },
+          {
+            pattern: "$routes/**",
+            position: "after",
+            group: "external",
+          },
+          {
+            pattern: "$utils/**",
+            position: "after",
+            group: "external",
+          },
+          {
+            pattern: "$middlewares/**",
+            position: "after",
+            group: "external",
+          },
+          {
+            pattern: "$models/**",
+            position: "after",
+            group: "external",
+          },
+          {
+            pattern: "$controllers/**",
+            position: "after",
+            group: "external",
+          },
+        ],
         "newlines-between": "always",
       },
     ],

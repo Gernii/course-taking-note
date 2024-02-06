@@ -15,6 +15,7 @@
     ],
     "conventionalCommits.scopes": [
       "backend",
-    ]
+    ],
+    "editor.fontSize": 16
   }
   
