@@ -1,43 +1,37 @@
-import type { createRoute } from '@hono/zod-openapi';
+import { createRoute } from '@hono/zod-openapi';
 import { StatusCodes } from 'http-status-codes';
 
 import { schemaError400To499 } from '$schemas/error';
 
-export const createPrivateRoute = <T extends ReturnType<typeof createRoute>>(route: T) => {
-	route.security = [
-		{
-			Bearer: [] // <- Add security name (must be same)
-		},
-		...(route.security ? route.security : [])
-	];
-
-	route.responses = {
-		[StatusCodes.BAD_REQUEST]: {
-			content: {
-				'application/json': {
-					schema: schemaError400To499
-				}
+export const createPrivateRoute = <T extends Parameters<typeof createRoute>[0]>(route: T) => {
+	const bewRoute = createRoute({
+		...route,
+		security: [{ Bearer: [] }, ...(route.security ? route.security : [])],
+		responses: {
+			[StatusCodes.BAD_REQUEST]: {
+				content: { 'application/json': { schema: schemaError400To499 } },
+				description: 'Returns an error'
 			},
-			description: 'Returns an error'
-		},
-		...route.responses
-	};
-
-	return route;
+			...route.responses
+		}
+	});
+	return bewRoute;
 };
 
-export const createCommonRoute = <T extends ReturnType<typeof createRoute>>(route: T) => {
-	route.responses = {
-		[StatusCodes.BAD_REQUEST]: {
-			content: {
-				'application/json': {
-					schema: schemaError400To499
-				}
+export const createCommonRoute = <T extends Parameters<typeof createRoute>[0]>(route: T) => {
+	const bewRoute = createRoute({
+		...route,
+		responses: {
+			[StatusCodes.BAD_REQUEST]: {
+				content: {
+					'application/json': {
+						schema: schemaError400To499
+					}
+				},
+				description: 'Returns an error'
 			},
-			description: 'Returns an error'
-		},
-		...route.responses
-	};
-
-	return route;
+			...route.responses
+		}
+	});
+	return bewRoute;
 };

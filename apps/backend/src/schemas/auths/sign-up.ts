@@ -4,9 +4,13 @@ export const schemaSignUpBody = z.object({
 	username: z.string().openapi({
 		example: 'litahung'
 	}),
-	password: z.string().max(18).openapi({
-		example: 'password1234'
-	})
+	password: z
+		.string()
+		.min(8, 'Invalid')
+		.regex(/(?![a-zA-Z\d\W])/g, 'Invalid')
+		.openapi({
+			example: 'password1234'
+		})
 });
 
 export const schemaSignUpResponse = z.object({
