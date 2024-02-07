@@ -1,11 +1,12 @@
+import './pre-init';
 import { cors } from 'hono/cors';
 import { csrf } from 'hono/csrf';
 import { secureHeaders } from 'hono/secure-headers';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { swaggerUI } from '@hono/swagger-ui';
 import { serve } from '@hono/node-server';
+import { HTTPException } from 'hono/http-exception';
 
-import './pre-init';
 import type { Env } from '$configs/type.config';
 
 import { deserializeUserMiddleware } from '$middlewares/deserialize-user.middleware';
@@ -44,6 +45,11 @@ app.notFound((c) => {
 
 // Error handling
 app.onError((err, c) => {
+	if (err instanceof HTTPException) {
+		// Get the custom response
+		return err.getResponse();
+	}
+
 	console.error(`${err}`);
 	return c.json({ message: 'System Error', ok: false }, 500);
 });

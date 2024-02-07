@@ -1,4 +1,4 @@
-import type { AccessTokenProps } from '$middlewares/deserialize-user.middleware';
+import type { JWTTokenProps } from '$middlewares/deserialize-user.middleware';
 
 export type EnvBindings = {
 	JWT_SECRET?: string;
@@ -9,7 +9,7 @@ export type EnvBindings = {
 	PG_PORT?: number;
 };
 export type EnvVariabless = {
-	user: AccessTokenProps;
+	user?: JWTTokenProps;
 };
 
 export type Env = {

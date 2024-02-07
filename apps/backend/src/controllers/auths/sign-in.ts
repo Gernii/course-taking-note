@@ -1,20 +1,20 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { env } from 'hono/adapter';
 import { StatusCodes } from 'http-status-codes';
+import { verify } from 'argon2';
 
 import type { Env } from '$configs/type.config';
 
-import { routeAuthSignUp } from '$routes/auths/sign-up';
+import { routeAuthSignIn } from '$routes/auths/sign-in';
 
 import { generateJWToken } from '$utils/tokens-generator';
 import { customHTTPException } from '$utils/create-custom-error-message';
 
-import { userCreate } from '$services/user/create';
-import { userValidate } from '$services/user/validate';
+import { userGetPassword } from '$services/user/get-password';
 
-export const controllerAuthSignUp = new OpenAPIHono<Env>();
+export const controllerAuthSignIn = new OpenAPIHono<Env>();
 
-controllerAuthSignUp.openapi(routeAuthSignUp, async (c) => {
+controllerAuthSignIn.openapi(routeAuthSignIn, async (c) => {
 	const envDt = env(c);
 
 	const { JWT_SECRET } = envDt;
@@ -23,27 +23,30 @@ controllerAuthSignUp.openapi(routeAuthSignUp, async (c) => {
 			message: 'JWT_* is missing'
 		});
 	}
+
 	const body = c.req.valid('json');
 
-	const user = await userValidate(envDt, { username: body.username });
+	const user = await userGetPassword(envDt, {
+		username: body.username
+	});
 
-	if (user) {
+	if (!user) {
 		throw customHTTPException(StatusCodes.BAD_REQUEST, {
-			message: 'Username already exists'
+			message: 'Invalid username or password'
 		});
 	}
 
-	const newUser = await userCreate(envDt, { password: body.password, username: body.username });
+	const isPasswordValid = await verify(user.password, body.password);
 
-	if (!newUser) {
-		throw customHTTPException(StatusCodes.INTERNAL_SERVER_ERROR, {
-			message: 'Failed to create user'
+	if (!isPasswordValid) {
+		throw customHTTPException(StatusCodes.BAD_REQUEST, {
+			message: 'Invalid username or password'
 		});
 	}
 
 	const accessToken = await generateJWToken(
 		{
-			id: newUser.id,
+			id: user.id,
 			username: body.username,
 			type: 'access'
 		},
@@ -52,7 +55,7 @@ controllerAuthSignUp.openapi(routeAuthSignUp, async (c) => {
 
 	const refreshToken = await generateJWToken(
 		{
-			id: newUser.id,
+			id: user.id,
 			username: body.username,
 			type: 'refresh'
 		},

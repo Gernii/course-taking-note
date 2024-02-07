@@ -1,9 +1,10 @@
 import { Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
-import { HTTPException } from 'hono/http-exception';
 import { StatusCodes } from 'http-status-codes';
 
 import type { EnvBindings } from '$configs/type.config';
+
+import { customHTTPException } from '$utils/create-custom-error-message';
 
 import type { UserModel } from '$models/user';
 
@@ -26,7 +27,7 @@ const connectPGDatabase = (config: EnvBindings) => {
 		PG_PORT === undefined ||
 		PG_PASSWORD === undefined
 	) {
-		throw new HTTPException(StatusCodes.INTERNAL_SERVER_ERROR, {
+		throw customHTTPException(StatusCodes.INTERNAL_SERVER_ERROR, {
 			message: 'PG_* is missing'
 		});
 	}
