@@ -5,9 +5,9 @@ import { controllerAuthSignIn } from './sign-in';
 import { controllerAuthRefreshToken } from './refresh-token';
 import { controllerAuthRefreshPassword } from './refresh-password';
 
-export const routeAuths = new OpenAPIHono();
+export const controllerAuths = new OpenAPIHono();
 
-routeAuths.route('/', controllerAuthSignUp);
-routeAuths.route('/', controllerAuthSignIn);
-routeAuths.route('/', controllerAuthRefreshToken);
-routeAuths.route('/', controllerAuthRefreshPassword);
+controllerAuths.route('/', controllerAuthSignUp);
+controllerAuths.route('/', controllerAuthSignIn);
+controllerAuths.route('/', controllerAuthRefreshToken);
+controllerAuths.route('/', controllerAuthRefreshPassword);

@@ -1,17 +1,21 @@
 import './pre-init';
+
+// import { csrf } from 'hono/csrf';
 import { cors } from 'hono/cors';
-import { csrf } from 'hono/csrf';
 import { secureHeaders } from 'hono/secure-headers';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { swaggerUI } from '@hono/swagger-ui';
 import { serve } from '@hono/node-server';
 import { HTTPException } from 'hono/http-exception';
+import { serveStatic } from '@hono/node-server/serve-static';
+import { logger } from 'hono/logger';
 
 import type { Env } from '$configs/type.config';
 
 import { deserializeUserMiddleware } from '$middlewares/deserialize-user.middleware';
 
-import { routeAuths } from '$controllers/auths';
+import { controllerAuths } from '$controllers/auths';
+import { controllerUploads } from '$controllers/uploads';
 
 const app = new OpenAPIHono<Env>();
 
@@ -22,6 +26,7 @@ app.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
 });
 
 app.use('*', secureHeaders());
+app.use('*', logger());
 
 app.use(
 	'*',
@@ -30,12 +35,13 @@ app.use(
 	})
 );
 
-app.use('*', csrf({ origin: '*' }));
+// app.use('*', csrf({ origin: '*' }));
 
 app.use('*', deserializeUserMiddleware);
 
 // Start: routes
-app.route('auths', routeAuths);
+app.route('auths', controllerAuths);
+app.route('uploads', controllerUploads);
 // End: routes
 
 // Custom Not Found Message
@@ -46,8 +52,10 @@ app.notFound((c) => {
 // Error handling
 app.onError((err, c) => {
 	if (err instanceof HTTPException) {
+		const HTTPError = err.getResponse();
+
 		// Get the custom response
-		return err.getResponse();
+		return HTTPError;
 	}
 
 	console.error(`${err}`);
@@ -72,6 +80,16 @@ app.get('/docs', swaggerUI({ url: '/doc' }));
 
 const port = 3001;
 console.log(`Server is running on port ${port}`);
+
+app.get(
+	'/statics/*',
+	serveStatic({
+		root: './',
+		onNotFound: (path, c) => {
+			console.log(`${path} is not found, request to ${c.req.path}`);
+		}
+	})
+);
 
 serve({
 	fetch: app.fetch,
