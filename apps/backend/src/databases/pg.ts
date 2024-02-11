@@ -7,9 +7,11 @@ import type { EnvBindings } from '$configs/type.config';
 import { customHTTPException } from '$utils/create-custom-error-message';
 
 import type { UserModel } from '$models/user';
+import type { NoteModel } from '$models/note';
 
 export interface Database {
 	user: UserModel;
+	note: NoteModel;
 }
 
 // Database interface is passed to Kysely's constructor, and from now on, Kysely

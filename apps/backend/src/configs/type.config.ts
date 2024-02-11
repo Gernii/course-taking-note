@@ -1,4 +1,4 @@
-import type { JWTTokenProps } from '$middlewares/deserialize-user.middleware';
+import type { JWTTokenProps } from '$middlewares/deserialize-user';
 
 export type EnvBindings = {
 	JWT_SECRET?: string;

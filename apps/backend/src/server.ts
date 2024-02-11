@@ -17,6 +17,7 @@ import { setLanguageMiddleware } from '$middlewares/set-language';
 
 import { controllerAuths } from '$controllers/auths';
 import { controllerUploads } from '$controllers/uploads';
+import { controllerNotes } from '$controllers/notes';
 
 const app = new OpenAPIHono<Env>();
 
@@ -44,6 +45,7 @@ app.use('*', setLanguageMiddleware);
 // Start: routes
 app.route('auths', controllerAuths);
 app.route('uploads', controllerUploads);
+app.route('notes', controllerNotes);
 // End: routes
 
 // Custom Not Found Message
