@@ -12,7 +12,8 @@ import { logger } from 'hono/logger';
 
 import type { Env } from '$configs/type.config';
 
-import { deserializeUserMiddleware } from '$middlewares/deserialize-user.middleware';
+import { deserializeUserMiddleware } from '$middlewares/deserialize-user';
+import { setLanguageMiddleware } from '$middlewares/set-language';
 
 import { controllerAuths } from '$controllers/auths';
 import { controllerUploads } from '$controllers/uploads';
@@ -38,6 +39,7 @@ app.use(
 // app.use('*', csrf({ origin: '*' }));
 
 app.use('*', deserializeUserMiddleware);
+app.use('*', setLanguageMiddleware);
 
 // Start: routes
 app.route('auths', controllerAuths);

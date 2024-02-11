@@ -6,13 +6,19 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch src/server.ts --clear-screen=false",
     "fmt": "run-s \"fmt.*\"",
     "fmt.write": "prettier --write \"src/**/*.ts\"",
     "fmt.check": "prettier --check \"src/**/*.ts\"",
     "lint": "run-s \"lint.*\"",
     "lint.fix": "eslint \"src/**/*.ts\" --fix",
-    "lint.check": "eslint  \"src/**/*.ts\"  --max-warnings=0"
+    "lint.check": "eslint  \"src/**/*.ts\"  --max-warnings=0",
+    "postinstall": "paraglide-js compile --project ./project.inlang",
+    "-----------------DEPRECATED": "",
+    "lang": "paraglide-js compile --project ./project.inlang --outdir ./src/libs/i18n/messages",
+    "dep-dev": "concurrently \"npm run lang:watch\" \"npm run dev:tsx\"",
+    "dev:tsx": "tsx watch src/server.ts --clear-screen=false",
+    "lang:watch": "nodemon --watch src/server.ts --exec \"npm run lang\" --ignore \"src/libs/i18n/messages/*\""
   },
   "dependencies": {
     "@hono/node-server": "^1.7.0",
@@ -30,6 +36,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@inlang/paraglide-js": "1.2.5",
     "@repo/eslint-config": "*",
     "@types/pg": "^8.11.0",
     "tsx": "^4.7.0"
