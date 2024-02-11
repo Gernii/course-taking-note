@@ -6,6 +6,9 @@
 			"$*": ["src/*"]
 		},
 		"jsxImportSource": "hono/jsx",
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "Bundler",
+		"allowJs": true
 	}
 }
